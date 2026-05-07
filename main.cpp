@@ -36,7 +36,7 @@ int main() {
 
   long long min_machine = *std::min_element(machines.begin(), machines.end());
   long long low = 1;
-  long long high = (goal > 0 && min_machine > LLONG_MAX / goal) ? LLONG_MAX : min_machine * goal;
+  long long high = (min_machine > LLONG_MAX / goal) ? LLONG_MAX : min_machine * goal;
   long long answer = high;
 
   while (low <= high) {
@@ -45,7 +45,7 @@ int main() {
 
     for (long long machine : machines) {
       long long add = mid / machine;
-      if (produced >= goal - add) {
+      if (add >= goal - produced) {
         produced = goal;
         break;
       }
