@@ -15,8 +15,9 @@ struct Medicine {
 };
 
 int solve(int symptom_count, const vector<Medicine>& medicines) {
-    const int full_mask = (1 << symptom_count) - 1;
-    vector<int> distance(1 << symptom_count, -1);
+    const int state_count = static_cast<int>(1u << symptom_count);
+    const int full_mask = state_count - 1;
+    vector<int> distance(state_count, -1);
     queue<int> states;
 
     distance[full_mask] = 0;
