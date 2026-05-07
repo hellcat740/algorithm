@@ -13,20 +13,24 @@ int main() {
   }
 
   if (n <= 0) {
-    std::cout << 0 << '\n';
-    return 0;
+    std::cerr << "Invalid input: n must be positive.\n";
+    return 1;
   }
 
   std::vector<long long> machines(n);
   for (long long i = 0; i < n; ++i) {
     std::cin >> machines[i];
     if (machines[i] <= 0) {
-      std::cout << 0 << '\n';
-      return 0;
+      std::cerr << "Invalid input: machine times must be positive.\n";
+      return 1;
     }
   }
 
-  if (goal <= 0) {
+  if (goal < 0) {
+    std::cerr << "Invalid input: goal must be non-negative.\n";
+    return 1;
+  }
+  if (goal == 0) {
     std::cout << 0 << '\n';
     return 0;
   }
