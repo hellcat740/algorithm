@@ -59,14 +59,16 @@ void dfs(int move, int used) {
         return;
     }
 
+    const array<int, 9> saved_state = clocks_state;
     for (int repeat = 0; repeat < 4; ++repeat) {
-        if (repeat > 0) {
+        clocks_state = saved_state;
+        for (int step = 0; step < repeat; ++step) {
             apply_move(move, 1);
         }
         move_count[move] = repeat;
         dfs(move + 1, used + repeat);
     }
-    apply_move(move, 1);
+    clocks_state = saved_state;
     move_count[move] = 0;
 }
 
