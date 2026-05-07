@@ -12,12 +12,21 @@ int main() {
     return 0;
   }
 
+  if (n <= 0) {
+    std::cout << 0 << '\n';
+    return 0;
+  }
+
   std::vector<long long> machines(n);
   for (long long i = 0; i < n; ++i) {
     std::cin >> machines[i];
   }
 
-  if (goal <= 0) {
+  if (goal < 0) {
+    std::cout << 0 << '\n';
+    return 0;
+  }
+  if (goal == 0) {
     std::cout << 0 << '\n';
     return 0;
   }
