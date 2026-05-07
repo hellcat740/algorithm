@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <array>
-#include <cmath>
+#include <cstdlib>
 #include <functional>
 #include <iostream>
 #include <limits>
@@ -11,6 +11,15 @@ using namespace std;
 namespace {
 
 constexpr long long INF = numeric_limits<long long>::max() / 4;
+
+int bit_count(int mask) {
+    int count = 0;
+    while (mask > 0) {
+        mask &= (mask - 1);
+        ++count;
+    }
+    return count;
+}
 
 long long build_min_number(int mask, const vector<int>& digits) {
     vector<int> values;
@@ -62,7 +71,7 @@ long long solve_odd_case(const vector<int>& digits) {
     long long answer = INF;
 
     for (int mask = 0; mask <= full_mask; ++mask) {
-        if (__builtin_popcount(mask) != longer_size) {
+        if (bit_count(mask) != longer_size) {
             continue;
         }
         long long bigger = build_min_number(mask, digits);
@@ -97,7 +106,7 @@ long long solve_even_case(const vector<int>& digits) {
         }
         seen[mask][state] = true;
 
-        const int remaining_digits = __builtin_popcount(mask);
+        const int remaining_digits = bit_count(mask);
         const int remaining_positions = remaining_digits / 2;
         const long long place_value = powers[remaining_positions - 1];
         const bool first_position = (remaining_digits == n);
@@ -132,8 +141,8 @@ long long solve_even_case(const vector<int>& digits) {
                 } else {
                     const int next_cmp = (digits[i] > digits[j] ? 1 : -1);
                     const long long candidate = current + dfs(next_mask, next_cmp);
-                    if (llabs(candidate) < llabs(best) ||
-                        (llabs(candidate) == llabs(best) && candidate < best)) {
+                    if (abs(candidate) < abs(best) ||
+                        (abs(candidate) == abs(best) && candidate < best)) {
                         best = candidate;
                     }
                 }
@@ -144,7 +153,7 @@ long long solve_even_case(const vector<int>& digits) {
         return best;
     };
 
-    return llabs(dfs(full_mask, 0));
+    return abs(dfs(full_mask, 0));
 }
 
 long long solve_case(vector<int> digits) {
