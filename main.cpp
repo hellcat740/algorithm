@@ -16,6 +16,14 @@ int main() {
     std::cerr << "Invalid input: n must be positive.\n";
     return 1;
   }
+  if (goal < 0) {
+    std::cerr << "Invalid input: goal must be non-negative.\n";
+    return 1;
+  }
+  if (goal == 0) {
+    std::cout << 0 << '\n';
+    return 0;
+  }
 
   std::vector<long long> machines(n);
   for (long long i = 0; i < n; ++i) {
@@ -26,18 +34,9 @@ int main() {
     }
   }
 
-  if (goal < 0) {
-    std::cerr << "Invalid input: goal must be non-negative.\n";
-    return 1;
-  }
-  if (goal == 0) {
-    std::cout << 0 << '\n';
-    return 0;
-  }
-
   long long min_machine = *std::min_element(machines.begin(), machines.end());
   long long low = 1;
-  long long high = (min_machine > LLONG_MAX / goal) ? LLONG_MAX : min_machine * goal;
+  long long high = (goal > 0 && min_machine > LLONG_MAX / goal) ? LLONG_MAX : min_machine * goal;
   long long answer = high;
 
   while (low <= high) {
