@@ -60,10 +60,13 @@ void dfs(int move, int used) {
     }
 
     for (int repeat = 0; repeat < 4; ++repeat) {
+        if (repeat > 0) {
+            apply_move(move, 1);
+        }
         move_count[move] = repeat;
         dfs(move + 1, used + repeat);
-        apply_move(move, 1);
     }
+    apply_move(move, 1);
     move_count[move] = 0;
 }
 
