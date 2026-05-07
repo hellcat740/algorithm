@@ -8,6 +8,7 @@ namespace {
 
 constexpr int kMaxSymptoms = 10;
 constexpr int kMaxMedicines = 100;
+constexpr int kMaxShiftableSymptoms = 31;
 
 struct Medicine {
     int cure_mask = 0;
@@ -53,7 +54,7 @@ int main() {
     int n;
     int m;
     cin >> n >> m;
-    if (n < 0 || n > kMaxSymptoms || m < 0 || m > kMaxMedicines) {
+    if (n < 0 || n > kMaxSymptoms || n >= kMaxShiftableSymptoms || m < 0 || m > kMaxMedicines) {
         cout << -1 << '\n';
         return 0;
     }
