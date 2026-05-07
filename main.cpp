@@ -1,10 +1,33 @@
 #include <algorithm>
 #include <functional>
 #include <iostream>
+#include <tuple>
 #include <unordered_map>
 #include <vector>
 
 using namespace std;
+
+struct State {
+    int lx;
+    int rx;
+    int ly;
+    int ry;
+    int rects;
+
+    bool operator==(const State& other) const {
+        return lx == other.lx && rx == other.rx && ly == other.ly && ry == other.ry &&
+               rects == other.rects;
+    }
+};
+
+struct StateHash {
+    size_t operator()(const State& state) const {
+        return hash<long long>()((((1LL * state.lx * 53 + state.rx) * 53 + state.ly) * 53 +
+                                  state.ry) *
+                                     5 +
+                                 state.rects);
+    }
+};
 
 int main() {
     ios::sync_with_stdio(false);
@@ -57,8 +80,7 @@ int main() {
         return 1LL * (xs[rx] - xs[lx]) * (ys[ry] - ys[ly]);
     };
 
-    unordered_map<long long, long long> memo;
-    const long long keyBase = max(xCount, yCount) + 1LL;
+    unordered_map<State, long long, StateHash> memo;
 
     function<long long(int, int, int, int, int)> solve =
         [&](int lx, int rx, int ly, int ry, int rects) -> long long {
@@ -84,15 +106,11 @@ int main() {
             }
 
             long long best = area(lx, rx, ly, ry);
-            if (rects == 1 || best == 0) {
+            if (rects == 1) {
                 return best;
             }
 
-            long long key = rects;
-            key = key * keyBase + lx;
-            key = key * keyBase + rx;
-            key = key * keyBase + ly;
-            key = key * keyBase + ry;
+            State key{lx, rx, ly, ry, rects};
 
             if (auto it = memo.find(key); it != memo.end()) {
                 return it->second;
