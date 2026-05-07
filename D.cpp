@@ -6,6 +6,8 @@ using namespace std;
 
 namespace {
 
+constexpr int kMaxSymptoms = 10;
+
 struct Medicine {
     int cure_mask = 0;
     int add_mask = 0;
@@ -49,6 +51,10 @@ int main() {
     int n;
     int m;
     cin >> n >> m;
+    if (n < 0 || n > kMaxSymptoms) {
+        cout << -1 << '\n';
+        return 0;
+    }
 
     vector<Medicine> medicines(m);
     for (int i = 0; i < m; ++i) {
