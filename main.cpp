@@ -25,15 +25,20 @@ int main() {
         cout << 0 << '\n';
         return 0;
     }
-    int edge_count = n > 0 ? n - 1 : 0;
+    int edge_count;
     int start = 1;
 
+    // Support both common tree input styles:
+    // 1) n followed by n - 1 edges
+    // 2) n m followed by m edges
     if (static_cast<int>(values.size()) >= 2 && static_cast<int>(values.size()) == 2 + values[1] * 2) {
         edge_count = values[1];
         start = 2;
     } else if (static_cast<int>(values.size()) == 1 + (n - 1) * 2) {
         edge_count = n - 1;
         start = 1;
+    } else {
+        edge_count = n - 1;
     }
 
     vector<vector<int>> graph(n + 1);
@@ -51,7 +56,7 @@ int main() {
     stack<int> st;
     st.push(1);
     parent[1] = -1;
-    depth[1] = 1;
+    depth[1] = 0;
     while (!st.empty()) {
         int u = st.top();
         st.pop();
@@ -68,7 +73,7 @@ int main() {
     }
 
     vector<int> subtree_size(n + 1, 1);
-    int max_depth = 1;
+    int max_depth = 0;
     for (int i = static_cast<int>(order.size()) - 1; i >= 0; --i) {
         int u = order[i];
         max_depth = max(max_depth, depth[u]);
@@ -95,7 +100,7 @@ int main() {
     };
     build_euler_tour(1);
 
-    for (int d = 1; d <= max_depth; ++d) {
+    for (int d = 0; d <= max_depth; ++d) {
         sort(nodes_at_depth[d].begin(), nodes_at_depth[d].end(), [&](int lhs, int rhs) {
             return subtree_size[lhs] > subtree_size[rhs];
         });
@@ -147,7 +152,7 @@ int main() {
         }
     };
 
-    search_optimal_cut(2, 1);
+    search_optimal_cut(1, 1);
     cout << answer << '\n';
     return 0;
 }
