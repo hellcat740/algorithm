@@ -45,7 +45,7 @@ struct Solver {
     }
 
     void dfs(int move, int used) {
-        if (used > best_length) {
+        if (used >= best_length) {
             return;
         }
         if (move == 9) {
@@ -54,16 +54,13 @@ struct Solver {
                     return;
                 }
             }
-            vector<int> sequence = build_sequence();
-            if (used < best_length || (used == best_length && sequence < best_sequence)) {
-                best_length = used;
-                best_sequence = sequence;
-            }
+            best_length = used;
+            best_sequence = build_sequence();
             return;
         }
 
         const array<int, 9> saved_state = clocks_state;
-        for (int repeat = 0; repeat < 4; ++repeat) {
+        for (int repeat = 3; repeat >= 0; --repeat) {
             clocks_state = saved_state;
             for (int step = 0; step < repeat; ++step) {
                 apply_move(move, 1);
