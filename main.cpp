@@ -21,6 +21,10 @@ int main() {
     }
 
     int n = values[0];
+    if (n <= 0) {
+        cout << 0 << '\n';
+        return 0;
+    }
     int edge_count = n > 0 ? n - 1 : 0;
     int start = 1;
 
@@ -81,20 +85,26 @@ int main() {
     vector<int> tin(n + 1, 0), tout(n + 1, 0), euler;
     euler.reserve(n);
     int timer = 0;
-    function<void(int)> build_euler = [&](int u) {
+    function<void(int)> build_euler_tour = [&](int u) {
         tin[u] = timer++;
         euler.push_back(u);
         for (int v : children[u]) {
-            build_euler(v);
+            build_euler_tour(v);
         }
         tout[u] = timer - 1;
     };
-    build_euler(1);
+    build_euler_tour(1);
+
+    for (int d = 1; d <= max_depth; ++d) {
+        sort(nodes_at_depth[d].begin(), nodes_at_depth[d].end(), [&](int lhs, int rhs) {
+            return subtree_size[lhs] > subtree_size[rhs];
+        });
+    }
 
     vector<char> blocked(n + 1, false);
     int answer = n;
 
-    function<void(int, int)> dfs = [&](int current_depth, int infected_count) {
+    function<void(int, int)> search_optimal_cut = [&](int current_depth, int infected_count) {
         if (infected_count >= answer) {
             return;
         }
@@ -121,10 +131,6 @@ int main() {
         }
 
         infected_count += static_cast<int>(candidates.size()) - 1;
-        sort(candidates.begin(), candidates.end(), [&](int lhs, int rhs) {
-            return subtree_size[lhs] > subtree_size[rhs];
-        });
-
         for (int u : candidates) {
             vector<int> changed;
             for (int idx = tin[u]; idx <= tout[u]; ++idx) {
@@ -134,14 +140,14 @@ int main() {
                     changed.push_back(node);
                 }
             }
-            dfs(current_depth + 1, infected_count);
+            search_optimal_cut(current_depth + 1, infected_count);
             for (int node : changed) {
                 blocked[node] = false;
             }
         }
     };
 
-    dfs(2, 1);
+    search_optimal_cut(2, 1);
     cout << answer << '\n';
     return 0;
 }
