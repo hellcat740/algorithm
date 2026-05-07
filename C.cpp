@@ -21,7 +21,7 @@ constexpr array<array<int, 9>, 9> kMoveEffect = {{
 array<int, 9> clocks_state{};
 array<int, 9> move_count{};
 vector<int> best_sequence;
-int best_length = 1e9;
+int best_length = 1000000000;
 
 void apply_move(int move, int delta) {
     for (int i = 0; i < 9; ++i) {
