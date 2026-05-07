@@ -22,10 +22,16 @@ struct State {
 
 struct StateHash {
     size_t operator()(const State& state) const {
-        return hash<long long>()((((1LL * state.lx * 53 + state.rx) * 53 + state.ly) * 53 +
-                                  state.ry) *
-                                     5 +
-                                 state.rects);
+        size_t seed = 0;
+        auto combine = [&](int value) {
+            seed ^= hash<int>()(value) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+        };
+        combine(state.lx);
+        combine(state.rx);
+        combine(state.ly);
+        combine(state.ry);
+        combine(state.rects);
+        return seed;
     }
 };
 
