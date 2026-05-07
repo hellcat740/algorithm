@@ -64,7 +64,6 @@ void dfs(int move, int used) {
         dfs(move + 1, used + repeat);
         apply_move(move, 1);
     }
-    apply_move(move, 1);
     move_count[move] = 0;
 }
 
