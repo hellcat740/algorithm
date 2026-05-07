@@ -8,7 +8,6 @@ namespace {
 
 constexpr int kMaxSymptoms = 10;
 constexpr int kMaxMedicines = 100;
-constexpr int kMaxShiftableSymptoms = 31;
 
 struct Medicine {
     int cure_mask = 0;
@@ -16,6 +15,9 @@ struct Medicine {
 };
 
 int solve(int symptom_count, const vector<Medicine>& medicines) {
+    if (symptom_count < 0 || symptom_count > kMaxSymptoms) {
+        return -1;
+    }
     const int state_count = static_cast<int>(1u << symptom_count);
     const int full_mask = state_count - 1;
     vector<int> distance(state_count, -1);
@@ -54,7 +56,7 @@ int main() {
     int n;
     int m;
     cin >> n >> m;
-    if (n < 0 || n > kMaxSymptoms || n >= kMaxShiftableSymptoms || m < 0 || m > kMaxMedicines) {
+    if (n < 0 || n > kMaxSymptoms || m < 0 || m > kMaxMedicines) {
         cout << -1 << '\n';
         return 0;
     }
