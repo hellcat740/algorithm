@@ -87,11 +87,12 @@ int main() {
                 return best;
             }
 
+            constexpr long long keyBase = 51;
             long long key = rects;
-            key = key * 64 + lx;
-            key = key * 64 + rx;
-            key = key * 64 + ly;
-            key = key * 64 + ry;
+            key = key * keyBase + lx;
+            key = key * keyBase + rx;
+            key = key * keyBase + ly;
+            key = key * keyBase + ry;
 
             if (auto it = memo.find(key); it != memo.end()) {
                 return it->second;
@@ -112,10 +113,10 @@ int main() {
                 if (countPoints(lx, rx, ly, cut) == 0 || countPoints(lx, rx, cut + 1, ry) == 0) {
                     continue;
                 }
-                for (int lowerRects = 1; lowerRects < rects; ++lowerRects) {
+                for (int bottomRects = 1; bottomRects < rects; ++bottomRects) {
                     best = min(best,
-                               solve(lx, rx, ly, cut, lowerRects) +
-                                   solve(lx, rx, cut + 1, ry, rects - lowerRects));
+                               solve(lx, rx, ly, cut, bottomRects) +
+                                   solve(lx, rx, cut + 1, ry, rects - bottomRects));
                 }
             }
 
