@@ -152,7 +152,7 @@ long long solve_even_case(const vector<int>& digits) {
     return abs(dfs(full_mask, 0));
 }
 
-long long solve_case(vector<int> digits) {
+long long solve_case(const vector<int>& digits) {
     if (digits.size() % 2 == 1) {
         return solve_odd_case(digits);
     }
