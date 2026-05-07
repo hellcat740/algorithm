@@ -58,6 +58,7 @@ int main() {
     };
 
     unordered_map<long long, long long> memo;
+    const long long keyBase = max(xCount, yCount) + 1LL;
 
     function<long long(int, int, int, int, int)> solve =
         [&](int lx, int rx, int ly, int ry, int rects) -> long long {
@@ -87,7 +88,6 @@ int main() {
                 return best;
             }
 
-            constexpr long long keyBase = 51;
             long long key = rects;
             key = key * keyBase + lx;
             key = key * keyBase + rx;
