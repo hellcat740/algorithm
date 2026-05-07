@@ -87,8 +87,7 @@ long long solve_even_case(const vector<int>& digits) {
     const int full_mask = (1 << n) - 1;
     const int length = n / 2;
 
-    array<long long, 6> powers{};
-    powers[0] = 1;
+    vector<long long> powers(length + 1, 1);
     for (int i = 1; i <= length; ++i) {
         powers[i] = powers[i - 1] * 10;
     }
@@ -111,10 +110,7 @@ long long solve_even_case(const vector<int>& digits) {
         const long long place_value = powers[remaining_positions - 1];
         const bool first_position = (remaining_digits == n);
 
-        long long best = (cmp == 1 ? INF : -INF);
-        if (cmp == 0) {
-            best = INF;
-        }
+        long long best = (cmp == 1 || cmp == 0) ? INF : -INF;
 
         for (int i = 0; i < n; ++i) {
             if ((mask & (1 << i)) == 0) {
@@ -139,7 +135,7 @@ long long solve_even_case(const vector<int>& digits) {
                 } else if (cmp == -1) {
                     best = max(best, current + dfs(next_mask, -1));
                 } else {
-                    const int next_cmp = (digits[i] > digits[j] ? 1 : -1);
+                    const int next_cmp = (digits[i] > digits[j] ? 1 : (digits[i] < digits[j] ? -1 : 0));
                     const long long candidate = current + dfs(next_mask, next_cmp);
                     if (abs(candidate) < abs(best) ||
                         (abs(candidate) == abs(best) && candidate < best)) {
