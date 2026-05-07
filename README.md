@@ -18,6 +18,6 @@ time.
 ### Build and run
 
 ```bash
-g++ -O2 -std=c++17 /home/runner/work/algorithm/algorithm/main.cpp -o /tmp/algorithm_main
+g++ -O2 -std=c++17 main.cpp -o /tmp/algorithm_main
 echo -e "3 10\n2 3 7" | /tmp/algorithm_main
 ```
