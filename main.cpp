@@ -1,5 +1,6 @@
 #include <array>
 #include <iostream>
+#include <limits>
 #include <vector>
 
 using namespace std;
@@ -28,7 +29,7 @@ int main() {
     }};
 
     constexpr int total_states = 1 << 18;
-    int best_steps = 1000000000;
+    int best_steps = numeric_limits<int>::max();
     vector<int> best_sequence;
 
     for (int mask = 0; mask < total_states; ++mask) {
@@ -66,7 +67,7 @@ int main() {
             }
         }
  
-        if (total < best_steps || sequence < best_sequence) {
+        if (total < best_steps || (total == best_steps && sequence < best_sequence)) {
             best_steps = total;
             best_sequence = sequence;
         }
