@@ -1,3 +1,4 @@
+#include <array>
 #include <iostream>
 #include <vector>
 
@@ -14,35 +15,36 @@ int main() {
         }
     }
 
-    const int effect[9][9] = {
-        {1, 1, 0, 1, 1, 0, 0, 0, 0},
-        {1, 1, 1, 0, 0, 0, 0, 0, 0},
-        {0, 1, 1, 0, 1, 1, 0, 0, 0},
-        {1, 0, 0, 1, 0, 0, 1, 0, 0},
-        {0, 1, 0, 1, 1, 1, 0, 1, 0},
-        {0, 0, 1, 0, 0, 1, 0, 0, 1},
-        {0, 0, 0, 1, 1, 0, 1, 1, 0},
-        {0, 0, 0, 0, 0, 0, 1, 1, 1},
-        {0, 0, 0, 0, 1, 1, 0, 1, 1}
-    };
+    const array<array<int, 9>, 9> effect = {{
+        {{1, 1, 0, 1, 1, 0, 0, 0, 0}},
+        {{1, 1, 1, 0, 0, 0, 0, 0, 0}},
+        {{0, 1, 1, 0, 1, 1, 0, 0, 0}},
+        {{1, 0, 0, 1, 0, 0, 1, 0, 0}},
+        {{0, 1, 0, 1, 1, 1, 0, 1, 0}},
+        {{0, 0, 1, 0, 0, 1, 0, 0, 1}},
+        {{0, 0, 0, 1, 1, 0, 1, 1, 0}},
+        {{0, 0, 0, 0, 0, 0, 1, 1, 1}},
+        {{0, 0, 0, 0, 1, 1, 0, 1, 1}}
+    }};
 
-    int best_steps = 1e9;
+    constexpr int total_states = 1 << 18;
+    int best_steps = 1000000000;
     vector<int> best_sequence;
 
-    for (int mask = 0; mask < (1 << 18); ++mask) {
+    for (int mask = 0; mask < total_states; ++mask) {
         int temp = mask;
-        int moves[9];
+        array<int, 9> moves{};
         int total = 0;
-        for (int i = 0; i < 9; ++i) {
-            moves[i] = temp & 3;
+        for (int &move : moves) {
+            move = temp & 3;
             temp >>= 2;
-            total += moves[i];
+            total += move;
         }
-
+ 
         if (total > best_steps) {
             continue;
         }
-
+ 
         bool ok = true;
         for (int clock = 0; clock < 9 && ok; ++clock) {
             int state = clocks[clock];
@@ -51,11 +53,11 @@ int main() {
             }
             ok = (state == 0);
         }
-
+ 
         if (!ok) {
             continue;
         }
-
+ 
         vector<int> sequence;
         sequence.reserve(total);
         for (int move = 0; move < 9; ++move) {
@@ -63,7 +65,7 @@ int main() {
                 sequence.push_back(move + 1);
             }
         }
-
+ 
         if (total < best_steps || sequence < best_sequence) {
             best_steps = total;
             best_sequence = sequence;
